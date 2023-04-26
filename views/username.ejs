@@ -21,10 +21,12 @@
                         </div>
                         <div id="usernameForm">
                             <div class="form-group">
-                                <label for="username">Digite seu nome de usuário:</label>
-                                <input type="text" class="form-control" id="username" name="username"> <br>
+                                <form action="/chat" method="post">
+                                    <label for="username">Digite seu nome de usuário:</label>
+                                    <input type="text" class="form-control" id="usernameInput" name="username"> <br>
+                                </form>  
                             </div>
-                            <button class="btn btn-primary" onclick="sendUsername()">Enviar</button>
+                            <button class="btn btn-primary" onclick="sendUsername()">Entrar</button>
                         </div>
                     </div>
                 </div>
@@ -59,14 +61,15 @@
     });
 
     function sendUsername(){
-        var username = document.getElementById("username").value
+        var username = document.getElementById("usernameInput").value
 
         if(username == '' || username == undefined){
             alert("Campo não preenchido corretamente")
 
         }else {
-            window.location.href = "/chat"
-            // socket.emit("username", username)
+            console.log(`${username} está aqui`)
+            socket.emit("usernameInput", username)
+            window.location.href = "/chat?username=" +username
         }
     }
 </script>

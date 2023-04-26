@@ -10,7 +10,7 @@
         integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 </head>
 <body>
-    <h1>
+    <h1 id="title">
         Chat using socket.io
     </h1>
 
@@ -76,6 +76,9 @@
 <script>
     const socket = io("http://localhost:8080")
 
+    const params = new URLSearchParams(window.location.search);
+    var username = params.get('username');
+
     // escutando evento de desconexao
     socket.on("disconnect", (data) => {
         console.log("Desconectado ")
@@ -123,17 +126,20 @@
     socket.on("showImg", (data) => {
         var paragrafo = document.getElementById("mensagensChat")
         var p = document.createElement("p")
-        p.innerHTML = `@${data.username}:  ${data.msg}`
+        p.innerHTML = `@${data.username}:  ${data.msg} ${username}`
         paragrafo.append(p)
+        
     })
 
-    // //  mostrando usuários que desconectaram
-    // socket.on("desconectedUser", (id) => {
-    //     var paragrafo = document.getElementById("mensagensChat")
-    //     var p = document.createElement("p")
-    //     p.style.color = "red"
-    //     p.innerHTML = `O usuário de id ${id} desconectou da conversa` 
-    //     paragrafo.append(p)
-    // })
+    //  mostrando usuários que desconectaram
+    socket.on("desconectedUser", (id) => {
+        var paragrafo = document.getElementById("mensagensChat")
+        var p = document.createElement("p")
+        p.style.color = "red"
+        p.innerHTML = `O usuário de id ${id} desconectou da conversa` 
+        paragrafo.append(p)
+    });
+        
+
 </script>
 </html>
