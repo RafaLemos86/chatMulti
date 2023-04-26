@@ -41,13 +41,8 @@ if (cluster.isMaster) {
     app.set("view engine", "ejs")
 
     app.get("/", (req, res) => {
-        res.render("username")
+        res.render("index")
     })
-
-    app.get("/chat", (req, res) => {
-        res.render("index");
-    })
-
 
 
 
@@ -60,7 +55,7 @@ if (cluster.isMaster) {
         socket.on("disconnect", () => {
             connectedUsersCount--
             io.emit("connectedUsersCount", (connectedUsersCount))
-            io.emit("desconectedUser", (socket.id))
+            io.emit("desconectedUser", (usernameInput))
 
         });
 
@@ -70,13 +65,10 @@ if (cluster.isMaster) {
             io.emit("showImg", data)
         });
 
-        socket.on("usernameInput", (newUsername) => {
-            usernameInput = newUsername
-            console.log(`${usernameInput} está no servidor`)
+        socket.on("name", user => {
+            usernameInput = user
         })
-
     })
-
 
 
 
