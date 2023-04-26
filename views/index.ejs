@@ -75,10 +75,6 @@
 
 <script>
     const socket = io("http://localhost:8080")
-
-    const params = new URLSearchParams(window.location.search);
-    var username = params.get('username');
-
     // escutando evento de desconexao
     socket.on("disconnect", (data) => {
         console.log("Desconectado ")
@@ -89,9 +85,6 @@
         var numberConected = document.getElementById("conectedUser")
         numberConected.innerHTML = count
     });
-
-    
-
 
 
     function sendData(){
@@ -126,7 +119,7 @@
     socket.on("showImg", (data) => {
         var paragrafo = document.getElementById("mensagensChat")
         var p = document.createElement("p")
-        p.innerHTML = `@${data.username}:  ${data.msg} ${username}`
+        p.innerHTML = `@${data.username}:  ${data.msg}`
         paragrafo.append(p)
         
     })

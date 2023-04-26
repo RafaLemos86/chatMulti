@@ -67,9 +67,8 @@
             alert("Campo não preenchido corretamente")
 
         }else {
-            console.log(`${username} está aqui`)
-            socket.emit("usernameInput", username)
-            window.location.href = "/chat?username=" +username
+            socket.emit("usernameInput", (username))
+            window.location.href = "/chat"
         }
     }
 </script>

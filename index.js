@@ -4,14 +4,14 @@ const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 const http = require("http");
 const socketio = require("socket.io");
-const session = require("express-session")
+
 
 
 
 
 // contador de usuários conectados
 let connectedUsersCount = 0
-let username = ""
+let usernameInput = ""
 
 // Verificando se o processo atual é o processo mestre
 if (cluster.isMaster) {
@@ -37,7 +37,6 @@ if (cluster.isMaster) {
     const server = http.createServer(app)
     const io = socketio(server);
 
-
     // Configurando rotas
     app.set("view engine", "ejs")
 
@@ -46,8 +45,7 @@ if (cluster.isMaster) {
     })
 
     app.get("/chat", (req, res) => {
-        username = req.query.username
-        res.render("index", { username });
+        res.render("index");
     })
 
 
@@ -73,8 +71,8 @@ if (cluster.isMaster) {
         });
 
         socket.on("usernameInput", (newUsername) => {
-            username = newUsername
-            console.log(`${username} está no servidor`)
+            usernameInput = newUsername
+            console.log(`${usernameInput} está no servidor`)
         })
 
     })
