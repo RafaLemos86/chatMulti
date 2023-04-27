@@ -79,58 +79,16 @@
 
 
 <script>
-    const socket = io("http://localhost:8080")
+    const socket = io("http://localhost:8080");
     var user;
-        
+
     // funcao para que o alert seja a primeira coisa a ser carregada no HTML
     document.addEventListener("DOMContentLoaded", function() {
         username()
-    })
-
-    // Escrever o nome no html e envia-lo para o servidor
-    function username(){
-        user = prompt("Digite seu nome de usuário")
-
-        // while(user == '' || user == undefined || user == null){
-        //     user = prompt("Digite seu nome de usuário")
-        // }
-
-        document.getElementById("title").innerHTML = `Bem vindo ao chat, ${user}!`
-        document.getElementById("username").value = user
-
-        socket.emit("name", (user))
-
-    }    
-
-
-     // escutando evento de desconexao
-    socket.on("disconnect", (data) => {
-        console.log("Desconectado ")
     });
-
-    // mostrando contagem de usuários conectados na tela 
-    socket.on("connectedUsersCount", (count) => {
-        var numberConected = document.getElementById("conectedUser")
-        numberConected.innerHTML = count
-    });
-
-
-    // enviando mensagem para o servidor
-    function sendData(){
-        var msg = document.getElementById("msg").value
-        var username = user
-
-        if(msg == '' || msg == undefined || username == '' || username == undefined){
-            alert("Campo não preenchido corretamente")
-        } else {
-             // enviando mensagem
-            socket.emit("msg", {msg, username})
-        }
-    };
 
     // limpando chat
     function clearChat(){
-        // limpando o chat
         var chat = document.getElementById("mensagensChat")   
         chat.parentNode.removeChild(chat)
 
@@ -142,8 +100,40 @@
 
         // adicionando
         chatFather.append(newChat)
-        
-    }
+    };
+
+    // enviando mensagem para o servidor
+    function sendData(){
+        var msg = document.getElementById("msg").value
+        var username = user
+
+        if(msg == '' || msg == undefined){
+            alert("Campo não preenchido corretamente")
+        } else {
+             // enviando mensagem
+            socket.emit("msg", {msg, username})
+        }
+    };
+
+     // Escrever o nome no html e envia-lo para o servidor
+    function username(){
+        user = prompt("Digite seu nome de usuário")
+
+        while(user == '' || user == undefined || user == null){
+            user = prompt("Digite seu nome de usuário")
+        };
+
+        document.getElementById("title").innerHTML = `Bem vindo ao chat, ${user}!`
+        document.getElementById("username").value = user
+
+        socket.emit("name", user)
+    };
+
+    // mostrando contagem de usuários conectados na tela 
+    socket.on("connectedUsersCount", (count) => {
+        var numberConected = document.getElementById("conectedUser")
+        numberConected.innerHTML = count
+    });
 
     // mostrando mensagem na tela 
     socket.on("showImg", (data) => {
@@ -151,19 +141,25 @@
         var p = document.createElement("p")
         p.innerHTML = `@${data.username}:  ${data.msg}`
         paragrafo.append(p)
-        
-    })
+    });
 
     //  mostrando usuários que desconectaram
     socket.on("desconectedUser", (id) => {
         var paragrafo = document.getElementById("mensagensChat")
         var p = document.createElement("p")
         p.style.color = "red"
-        p.innerHTML = `O usuário ${id} desconectou da conversa` 
+        p.innerHTML = `O usuário de id ${id} desconectou da conversa` 
         paragrafo.append(p)
     }); 
 
-    
+    socket.on("conectedUser", (name) => {
+        var paragrafo = document.getElementById("mensagensChat")
+        var p = document.createElement("p")
+        p.style.color = "green"
+        p.innerHTML = `O usuário ${name} entrou na conversa` 
+        paragrafo.append(p)
+    });
+
 
 </script>
 </html>

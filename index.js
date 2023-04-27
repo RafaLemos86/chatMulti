@@ -51,11 +51,12 @@ if (cluster.isMaster) {
         connectedUsersCount++
         io.emit("connectedUsersCount", (connectedUsersCount))
 
+
         // escutando evento de desconexao
         socket.on("disconnect", () => {
             connectedUsersCount--
             io.emit("connectedUsersCount", (connectedUsersCount))
-            io.emit("desconectedUser", (usernameInput))
+            io.emit("desconectedUser", (socket.id))
 
         });
 
@@ -67,8 +68,9 @@ if (cluster.isMaster) {
 
         socket.on("name", user => {
             usernameInput = user
+            io.emit("conectedUser", usernameInput)
         })
-    })
+    });
 
 
 
